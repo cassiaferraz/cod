@@ -1,59 +1,50 @@
-const avatarModel = require('../models/avatarModel');
-const path = require('path');
-const fs = require('fs');
+// routes/apiRoutes.js
+const express = require('express');
+const app = express.Router();
+ 
+const perfilRoutes = require('./perfil.js') // Importe o arquivo de rotas dos perfis
+app.use('/', perfilRoutes) // Use as rotas dos perfis
+ 
+ 
+const indicadoresRoutes = require('./indicadores.js') // Importe o arquivo de rotas dos indicadores
+app.use('/', indicadoresRoutes) // Use as rotas dos indicadores
+ 
+ 
+const avaliacaoRoutes = require('./avaliacaoMissoes.js') // Importe o arquivo de rotas das avaliações
+app.use('/', avaliacaoRoutes) // Use as rotas das avaliações
+ 
+ 
+ 
+const habRoutes = require('./habilidadesRoutes.js') //  Importe o arquivo de rotas das Habilidades
+app.use('/', habRoutes)  // Use as rotas das Habilidades
+ 
+ 
+const medalhaRoutes = require('./medalhasRoutes.js') //  Importe o arquivo de rotas das  Medalhas
+app.use('/', medalhaRoutes) // Use as rotas das  Medalhas
 
-const listAvatars = async (req, res) => {
-    try {
-        const avatarDir = path.join(__dirname, '..', 'assets', 'avatar');
-        fs.readdir(avatarDir, (err, files) => {
-            if (err) {
-                console.error("Erro ao listar avatares:", err);
-                return res.status(500).json({ error: 'Erro ao listar avatares' });
-            }
-            res.status(200).json(files);
-        });
-    } catch (err) {
-        console.error("Erro em listAvatars:", err);
-        res.status(500).json({ error: 'Erro ao listar avatares' });
-    }
-};
+const desafiosRoutes = require('./desafiosRoutes.js') //  Importe o arquivo de rotas das  Medalhas
+app.use('/', desafiosRoutes) // Use as rotas das  Medalhas
+ 
+const autoRoutes = require('./autoavaliacaoRoutes.js') //  rota do insert da auto avaliacao no banco
+app.use('/', autoRoutes)
+ 
+const autoavaliacaoRoutes = require('./buscarAvaliacaoRoutes.js') //  Importe o arquivo de rotas das Auto Avaliações
+app.use('/', autoavaliacaoRoutes) // Use as rotas das  Auto Avaliações
+ 
+const userGetRoutes = require('./getUserRoutes.js');
+app.use('/', userGetRoutes)
 
-const saveAvatar = async (req, res) => {
-    try {
-        const userId = req.userId; 
-        const { nameAvatar, avatarPath } = req.body;
-        const avatarFilename = avatarPath.split('/').pop(); 
 
-        await avatarModel.createAvatar(nameAvatar, avatarFilename);
+const avatarRoutes = require('./avatarRoutes'); 
+app.use('/', avatarRoutes);
 
-        const avatarId = await avatarModel.getAvatar(userId);
+const ChallengeRoutes = require('./ChallengeRoutes.js');
+app.use('/', ChallengeRoutes)
 
-        await avatarModel.setAvatar(userId, avatarId);
-
-        res.status(201).json({ message: 'Avatar salvo com sucesso' });
-    } catch (err) {
-        console.error("Erro em saveAvatar:", err);
-        res.status(500).json({ error: 'Erro ao salvar avatar no banco de dados.' });
-    }
-};
-
-const fetchAvatar = async (req, res) => {
-    const userId = req.userId;
-    console.log('userId from token:', userId);
-    try {
-        if (!userId) {
-            return res.status(400).json({ error: 'userId não fornecido' });
-        }
-        const avatar = await avatarModel.getAvatar(userId);
-        if (avatar) {
-            res.json({ avatarPath: avatar });
-        } else {
-            res.status(404).json({ error: 'Avatar não encontrado' });
-        }
-    } catch (error) {
-        console.error('Erro ao buscar o avatar:', error);
-        res.status(500).json({ error: 'Erro ao buscar o avatar' });
-    }
-};
-
-module.exports = { listAvatars, saveAvatar, fetchAvatar };
+ 
+const planilhaRoutes = require('./planilhas.js') // Importe o arquivo de rotas das Habilidades e medalhas
+app.use('/', planilhaRoutes) // Use as rotas das Habilidades e medalhas
+ 
+ 
+ 
+module.exports = app;
