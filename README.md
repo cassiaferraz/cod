@@ -59,3 +59,36 @@ const fetchAvatar = async (req, res) => {
 };
 
 module.exports = { listAvatars, saveAvatar, fetchAvatar };
+
+//model: 
+
+const sqlServer = require('../utils/sqlServer');
+
+async function createAvatar(userId, nameAvatar, avatarFilename) {
+    const sql = `INSERT INTO UserAvatars (nameAvatar, avatarPath)
+    VALUES ('${nameAvatar}', '${avatarFilename}')
+    ON DUPLICATE KEY UPDATE
+    nameAvatar = VALUES(nameAvatar),
+    avatarPath = VALUES(avatarPath)`
+}
+
+async function getAvatar(userId) {
+        const sql = `SELECT ID_Avatar FROM 
+        UserAvatars WHERE nameAvatar = '${nameAvatar}
+        AND avatarPath = '${avatarFilename}'`
+};
+
+
+async function setAvatar(userId, nameAvatar, avatarFilename) {
+    const sql = `INSERT INTO AVATAR_do_COLABORADOR 
+                (ID_COLABORADOR, ID_AVATAR)
+                VALUES ('${userId}', '${avatarId}')
+                ON DUPLICATE KEY UPDATE ID_AVATAR = VALUES(ID_AVATAR)`;
+            await sqlServer.dispatchQuery(sql);
+}
+
+module.exports = {
+    createAvatar,
+    getAvatar,
+    setAvatar
+};
