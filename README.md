@@ -1,94 +1,17 @@
-const avatarModel = require('../models/avatarModel');
-const path = require('path');
-const fs = require('fs');
+// routes/avatarRoutes.js
 
-const listAvatars = async (req, res) => {
-    try {
-        const avatarDir = path.join(__dirname, '..', 'assets', 'avatar');
-        fs.readdir(avatarDir, (err, files) => {
-            if (err) {
-                console.error("Erro ao listar avatares:", err);
-                return res.status(500).json({ error: 'Erro ao listar avatares' });
-            }
-            res.status(200).json(files);
-        });
-    } catch (err) {
-        console.error("Erro em listAvatars:", err);
-        res.status(500).json({ error: 'Erro ao listar avatares' });
-    }
-};
+const express = require('express');
+const app = express.Router();
+const avatarController = require('../controller/avatarController');
+const authenticateToken = require('../middleware/authMiddleware');
 
-const saveAvatar = async (req, res) => {
-    try {
-        const userId = req.userId; 
-        const { nameAvatar, avatarPath } = req.body;
-        const avatarFilename = avatarPath.split('/').pop(); 
-        
-        await avatarModel.setAvatar (nameAvatar, avatarFilename);
+// Rota para listar avatares
+app.get('/list-avatars', authenticateToken, avatarController.listAvatars);
 
-        //obter o ID do avatar atualizado:
-        const avatarId = await avatarModel.getAvatar(nameAvatar, avatarFilename);
+// Rota para salvar o avatar
+app.post('/set-avatar', authenticateToken, avatarController.saveAvatar);
 
-        //atualizar a associação entre user e avatar:
-        await avatarModel.setAvatar(userId, avatarId);
+// Rota para obter o avatar
+app.get('/get-avatar', authenticateToken, avatarController.fetchAvatar);
 
-        res.status(201).json({ message: 'Avatar salvo com sucesso' });
-    } catch (err) {
-        console.error("Erro em saveAvatar:", err);
-        res.status(500).json({ error: 'Erro ao salvar avatar no banco de dados.' });
-    }
-};
-
-const fetchAvatar = async (req, res) => {
-    const userId = req.userId;
-    console.log('userId from token:', userId);
-    try {
-        if (!userId) {
-            return res.status(400).json({ error: 'userId não fornecido' });
-        }
-        const avatar = await avatarModel.getAvatar(userId);
-        if (avatar) {
-            res.json(avatar);
-        } else {
-            res.status(404).json({ error: 'Avatar não encontrado' });
-        }
-    } catch (error) {
-        console.error('Erro ao buscar o avatar:', error);
-        res.status(500).json({ error: 'Erro ao buscar o avatar' });
-    }
-};
-
-module.exports = { listAvatars, saveAvatar, fetchAvatar };
-
-//model: 
-
-const sqlServer = require('../utils/sqlServer');
-
-async function createAvatar(userId, nameAvatar, avatarFilename) {
-    const sql = `INSERT INTO UserAvatars (nameAvatar, avatarPath)
-    VALUES ('${nameAvatar}', '${avatarFilename}')
-    ON DUPLICATE KEY UPDATE
-    nameAvatar = VALUES(nameAvatar),
-    avatarPath = VALUES(avatarPath)`
-}
-
-async function getAvatar(userId) {
-        const sql = `SELECT ID_Avatar FROM 
-        UserAvatars WHERE nameAvatar = '${nameAvatar}
-        AND avatarPath = '${avatarFilename}'`
-};
-
-
-async function setAvatar(userId, nameAvatar, avatarFilename) {
-    const sql = `INSERT INTO AVATAR_do_COLABORADOR 
-                (ID_COLABORADOR, ID_AVATAR)
-                VALUES ('${userId}', '${avatarId}')
-                ON DUPLICATE KEY UPDATE ID_AVATAR = VALUES(ID_AVATAR)`;
-            await sqlServer.dispatchQuery(sql);
-}
-
-module.exports = {
-    createAvatar,
-    getAvatar,
-    setAvatar
-};
+module.exports = app;
