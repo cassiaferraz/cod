@@ -1,106 +1,102 @@
-import React, { useState, useEffect } from 'react';
-import BoxPerfil from "../BoxPerfil/BoxPerfil";
-import Navmenu from '../../Navbar/Navmenu';
-import AvatarSelector from './AvatarSelector';
-import './Avatar.css';
-import Swal from 'sweetalert2';
+userId from token: R55555
+Erro ao buscar o avatar: ReferenceError: nameAvatar is not defined
+    at Object.getAvatar (C:\Users\40417764\Documents\P.Individual\progressao\pro
+gressao\server\src\models\avatarModel.js:15:43)
+    at fetchAvatar (C:\Users\40417764\Documents\P.Individual\progressao\progress
+ao\server\src\controller\avatarController.js:55:42)
+    at Layer.handle [as handle_request] (C:\Users\40417764\Documents\P.Individua
+l\progressao\progressao\server\node_modules\express\lib\router\layer.js:95:5)
+    at next (C:\Users\40417764\Documents\P.Individual\progressao\progressao\serv
+er\node_modules\express\lib\router\route.js:149:13)
+    at C:\Users\40417764\Documents\P.Individual\progressao\progressao\server\src
+\middleware\authMiddleware.js:14:9
+    at C:\Users\40417764\Documents\P.Individual\progressao\progressao\server\nod
+e_modules\jsonwebtoken\verify.js:261:12
+    at getSecret (C:\Users\40417764\Documents\P.Individual\progressao\progressao
+\server\node_modules\jsonwebtoken\verify.js:97:14)
+    at module.exports [as verify] (C:\Users\40417764\Documents\P.Individual\prog
+ressao\progressao\server\node_modules\jsonwebtoken\verify.js:101:10)
+    at authenticateToken (C:\Users\40417764\Documents\P.Individual\progressao\pr
+ogressao\server\src\middleware\authMiddleware.js:9:9)
+    at Layer.handle [as handle_request] (C:\Users\40417764\Documents\P.Individua
+l\progressao\progressao\server\node_modules\express\lib\router\layer.js:95:5)
+    at next (C:\Users\40417764\Documents\P.Individual\progressao\progressao\serv
+er\node_modules\express\lib\router\route.js:149:13)
+    at Route.dispatch (C:\Users\40417764\Documents\P.Individual\progressao\progr
+essao\server\node_modules\express\lib\router\route.js:119:3)
+    at Layer.handle [as handle_request] (C:\Users\40417764\Documents\P.Individua
+l\progressao\progressao\server\node_modules\express\lib\router\layer.js:95:5)
+    at C:\Users\40417764\Documents\P.Individual\progressao\progressao\server\nod
+e_modules\express\lib\router\index.js:284:15
+    at Function.process_params (C:\Users\40417764\Documents\P.Individual\progres
+sao\progressao\server\node_modules\express\lib\router\index.js:346:12)
+    at next (C:\Users\40417764\Documents\P.Individual\progressao\progressao\serv
+er\node_modules\express\lib\router\index.js:280:10)
+userId from token: R55555
+Erro ao buscar o avatar: ReferenceError: nameAvatar is not defined
+    at Object.getAvatar (C:\Users\40417764\Documents\P.Individual\progressao\pro
+gressao\server\src\models\avatarModel.js:15:43)
+    at fetchAvatar (C:\Users\40417764\Documents\P.Individual\progressao\progress
+ao\server\src\controller\avatarController.js:55:42)
+    at Layer.handle [as handle_request] (C:\Users\40417764\Documents\P.Individua
+l\progressao\progressao\server\node_modules\express\lib\router\layer.js:95:5)
+    at next (C:\Users\40417764\Documents\P.Individual\progressao\progressao\serv
+er\node_modules\express\lib\router\route.js:149:13)
+    at C:\Users\40417764\Documents\P.Individual\progressao\progressao\server\src
+\middleware\authMiddleware.js:14:9
+    at C:\Users\40417764\Documents\P.Individual\progressao\progressao\server\nod
+e_modules\jsonwebtoken\verify.js:261:12
+    at getSecret (C:\Users\40417764\Documents\P.Individual\progressao\progressao
+\server\node_modules\jsonwebtoken\verify.js:97:14)
+    at module.exports [as verify] (C:\Users\40417764\Documents\P.Individual\prog
+ressao\progressao\server\node_modules\jsonwebtoken\verify.js:101:10)
+    at authenticateToken (C:\Users\40417764\Documents\P.Individual\progressao\pr
+ogressao\server\src\middleware\authMiddleware.js:9:9)
+    at Layer.handle [as handle_request] (C:\Users\40417764\Documents\P.Individua
+l\progressao\progressao\server\node_modules\express\lib\router\layer.js:95:5)
+    at next (C:\Users\40417764\Documents\P.Individual\progressao\progressao\serv
+er\node_modules\express\lib\router\route.js:149:13)
+    at Route.dispatch (C:\Users\40417764\Documents\P.Individual\progressao\progr
+essao\server\node_modules\express\lib\router\route.js:119:3)
+    at Layer.handle [as handle_request] (C:\Users\40417764\Documents\P.Individua
+l\progressao\progressao\server\node_modules\express\lib\router\layer.js:95:5)
+    at C:\Users\40417764\Documents\P.Individual\progressao\progressao\server\nod
+e_modules\express\lib\router\index.js:284:15
+    at Function.process_params (C:\Users\40417764\Documents\P.Individual\progres
+sao\progressao\server\node_modules\express\lib\router\index.js:346:12)
+    at next (C:\Users\40417764\Documents\P.Individual\progressao\progressao\serv
+er\node_modules\express\lib\router\index.js:280:10)
+Erro em saveAvatar: TypeError: avatarModel.createAvatarAvatar is not a function
+    at saveAvatar (C:\Users\40417764\Documents\P.Individual\progressao\progressa
+o\server\src\controller\avatarController.js:27:27)
+    at Layer.handle [as handle_request] (C:\Users\40417764\Documents\P.Individua
+l\progressao\progressao\server\node_modules\express\lib\router\layer.js:95:5)
+    at next (C:\Users\40417764\Documents\P.Individual\progressao\progressao\serv
+er\node_modules\express\lib\router\route.js:149:13)
+    at C:\Users\40417764\Documents\P.Individual\progressao\progressao\server\src
+\middleware\authMiddleware.js:14:9
+    at C:\Users\40417764\Documents\P.Individual\progressao\progressao\server\nod
+e_modules\jsonwebtoken\verify.js:261:12
+    at getSecret (C:\Users\40417764\Documents\P.Individual\progressao\progressao
+\server\node_modules\jsonwebtoken\verify.js:97:14)
+    at module.exports [as verify] (C:\Users\40417764\Documents\P.Individual\prog
+ressao\progressao\server\node_modules\jsonwebtoken\verify.js:101:10)
+    at authenticateToken (C:\Users\40417764\Documents\P.Individual\progressao\pr
+ogressao\server\src\middleware\authMiddleware.js:9:9)
+    at Layer.handle [as handle_request] (C:\Users\40417764\Documents\P.Individua
+l\progressao\progressao\server\node_modules\express\lib\router\layer.js:95:5)
+    at next (C:\Users\40417764\Documents\P.Individual\progressao\progressao\serv
+er\node_modules\express\lib\router\route.js:149:13)
+    at Route.dispatch (C:\Users\40417764\Documents\P.Individual\progressao\progr
+essao\server\node_modules\express\lib\router\route.js:119:3)
+    at Layer.handle [as handle_request] (C:\Users\40417764\Documents\P.Individua
+l\progressao\progressao\server\node_modules\express\lib\router\layer.js:95:5)
+    at C:\Users\40417764\Documents\P.Individual\progressao\progressao\server\nod
+e_modules\express\lib\router\index.js:284:15
+    at Function.process_params (C:\Users\40417764\Documents\P.Individual\progres
+sao\progressao\server\node_modules\express\lib\router\index.js:346:12)
+    at next (C:\Users\40417764\Documents\P.Individual\progressao\progressao\serv
+er\node_modules\express\lib\router\index.js:280:10)
+    at Function.handle (C:\Users\40417764\Documents\P.Individual\progressao\prog
+ressao\server\node_modules\express\lib\router\index.js:175:3)
 
-export default function Avatar({ serverIP }) {
-    const token = sessionStorage.getItem("token");
-    if (!token) {
-        window.location.href = "/";
-    }
-
-    const [avatar, setAvatar] = useState(null);
-    const [selectedAvatar, setSelectedAvatar] = useState(null);
-    const userId = sessionStorage.getItem('userId');
-
-    useEffect(() => {
-        if (userId) {
-            fetch(`${serverIP}/get-avatar?userId=${userId}`, {
-                headers: {
-                    'x-access-token': token // Adiciona o token, se necessário
-                }
-            })
-                .then(response => response.json())
-                .then(data => setAvatar(data.avatarPath))
-                .catch(error => console.error('Erro ao buscar o avatar:', error));
-        } else {
-            console.error('User ID não encontrado no sessionStorage');
-        }
-    }, [serverIP, userId, token]);
-
-    const handleAvatarSelect = (avatar) => {
-        setSelectedAvatar(avatar);
-    };
-
-    const handleSaveAvatar = async () => {
-        if (!selectedAvatar) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Erro!',
-                text: 'Nenhum avatar selecionado.',
-            });
-            return;
-        }
-
-        if (!userId) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Erro!',
-                text: 'ID do usuário não encontrado.',
-            });
-            return;
-        }
-
-        try {
-            const response = await fetch(`${serverIP}/set-avatar`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'x-access-token': token
-                },
-                body: JSON.stringify({ userId, avatarPath: selectedAvatar })
-            });
-
-            if (response.ok) {
-                setAvatar(selectedAvatar);
-                sessionStorage.setItem('avatar', selectedAvatar);
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Alterado!',
-                    text: 'Avatar atualizado com sucesso!',
-                });
-            } else {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Erro!',
-                    text: `Erro ao atualizar o avatar: ${response.statusText}`,
-                });
-            }
-        } catch (error) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Erro!',
-                text: `Erro ao atualizar o avatar: ${error.message}`,
-            });
-        }
-    };
-
-    return (
-        <div className="todocontainer">
-            <BoxPerfil serverIP={serverIP} avatar={avatar} />
-            <Navmenu />
-            <div className='header-avatar'>
-                <h1>Selecione seu Avatar</h1>
-                <div className='avatares-options'>
-                    <AvatarSelector onSelect={handleAvatarSelect} />
-                    {selectedAvatar && <p>Avatar Selecionado: {selectedAvatar.split('/').pop().replace('.png', '')}</p>}
-                </div>
-                <button className='alterar-avatar' onClick={handleSaveAvatar}>
-                    Alterar Avatar
-                </button>
-            </div>
-        </div>
-    );
-}
