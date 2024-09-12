@@ -1,0 +1,35 @@
+.header-avatar {
+    margin-top: 2rem;
+}
+
+
+.avatares-options{
+    margin-top: 1.5rem;
+    margin-left: 4rem;
+}
+
+
+.alterar-avatar{
+    margin-top: 3rem;
+    border: 1px solid #660099;
+    border-radius: 10px;
+    width: 50%;
+    font-size: small;
+    height: 28px;
+    align-self: center;
+    background-color: #eb3d7d;
+    color: hsl(0, 0%, 100%);
+    margin-left: 9rem;
+    cursor: pointer;
+  }
+
+  .alterar-avatar:hover{
+    background-color: #660099;
+    border: 1px solid #ffffff;
+  }
+
+  .avatares-options p{
+    font-size:smaller;
+    padding: .7rem;
+    padding-left: 5.3rem;
+  }
