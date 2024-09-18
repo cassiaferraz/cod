@@ -1,21 +1,7 @@
-
-# Please enter the commit message for your changes. Lines starting
-# with '#' will be ignored, and an empty message aborts the commit.
-#
-# On branch master
-# Your branch and 'origin/master' have diverged,
-# and have 1 and 3 different commits each, respectively.
-#
-# Changes to be committed:
-#       deleted:    ../../client/src/assets/avatar/avatar1.png
-#       deleted:    ../../client/src/assets/avatar/avatar2.png
-#       deleted:    ../../client/src/assets/avatar/avatar3.png
-#       deleted:    ../../client/src/assets/avatar/avatar4.png
-#       deleted:    ../../client/src/assets/avatar/avatar5.png
-#       deleted:    ../../client/src/assets/avatar/avatar6.png
-#       modified:   ../../client/src/components/meu-perfil/Avatar/Avatar.css
-#       modified:   ../../client/src/components/meu-perfil/Avatar/Avatar.jsx
-#       modified:   ../../client/src/components/meu-perfil/Avatar/AvatarSelector.jsx
-#       modified:   ../../client/src/components/meu-perfil/BoxPerfil/BoxPerfil.jsx
-@@@                                                                             .git/COMMIT_EDITMSG [unix] (12:27 18/09/2024)                           14,1 Top
-
+rver/src (master|MERGING)
+$ git commit -m 'avatars'
+error: Committing is not possible because you have unmerged files.
+hint: Fix them up in the work tree, and then use 'git add/rm <file>'
+hint: as appropriate to mark resolution and make a commit.
+fatal: Exiting because of an unresolved conflict.
+U       client/src/components/meu-perfil/Avatar/AvatarSelector.jsx
