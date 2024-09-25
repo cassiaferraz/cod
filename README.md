@@ -1,6 +1,7 @@
 
 //avatar.jsx:
 
+
 import React, { useState, useEffect } from 'react';
 import BoxPerfil from "../BoxPerfil/BoxPerfil";
 import Navmenu from '../../Navbar/Navmenu';
@@ -129,8 +130,7 @@ export default function Avatar({ serverIP }) {
     );
 }
 
-//boxperfil:
-import usuario from '/img/svgs/avatarmasculino.png';
+//boxperfil: import usuario from '/img/svgs/avatarmasculino.png';
 import BarraProgresso from '../Progresso/BarraProgresso';
 import coin from '/img/svgs/Dolar_Dinero_Moneda_1Light.svg';
 import { Link } from 'react-router-dom';
