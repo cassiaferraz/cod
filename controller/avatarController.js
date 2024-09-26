@@ -15,7 +15,31 @@ const createAvatar = async (req, res) => {
         res.status(404).json({message: 'Deu ruim'})
     }
     };
+    };
 
+
+// const fetchAvatar = async (req, res) => {
+//     const userId = req.userId;
+//     let avatarId = req.body.avatarId;
+
+//     //console.log('userId from token:', userId);
+//     try {
+//         if (!userId) {
+//             return res.status(400).json({ error: 'userId não fornecido' });
+//         }
+//         const avatar = await avatarModel.getAvatar(avatarId);
+//         console.log('avatar obtido do banco de dados:', avatar);
+        
+//         if (avatarId) {
+//             res.json({ avatarId: avatarId });
+//         } else {
+//             res.status(404).json({ error: 'Avatar não encontrado' });
+//         }
+//     } catch (error) {
+//         console.error('Erro ao buscar o avatar:', error);
+//         res.status(500).json({ error: 'Erro ao buscar o avatar' });
+//     }
+// };
 
 const fetchAvatar = async (req, res) => {
     try {
