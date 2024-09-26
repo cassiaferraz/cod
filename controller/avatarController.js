@@ -2,119 +2,71 @@ const avatarModel = require('../models/avatarModel');
 const path = require('path');
 const fs = require('fs');
 
-const listAvatars = async (req, res) => {
+const createAvatar = async (req, res) => {
     try {
-        const avatarDir = path.join(__dirname, '..', 'assets', 'avatar');
-        fs.readdir(avatarDir, (err, files) => {
-            if (err) {
-                console.error("Erro ao listar avatares:", err);
-                return res.status(500).json({ error: 'Erro ao listar avatares' });
-            }
-            res.status(200).json(files);
-        });
+        const userId = req.userId
+        const avatarId = req.body.avatarId;
+        const result = await avatarModel.setAvatar(avatarId[0].ID_Avatar, userId);
+
+        console.log('avatar criado no banco de dados');
+        res.status(200).json(result)
     } catch (err) {
-        console.error("Erro em listAvatars:", err);
-        res.status(500).json({ error: 'Erro ao listar avatares' });
+        console.log(err)
+        res.status(404).json({message: 'Deu ruim'})
     }
-};
+    };
+
+
+const fetchAvatar = async (req, res) => {
+    try {
+        const userId = req.userId;
+        let avatarId = req.body.avatarId; //pega o ID do avatar do corpo da requisição
+
+        //const avatar = await avatarModel.getAvatar(avatarId)
+        const avatar = await avatarModel.getAvatar(avatarId, userId);
+        console.log(avatarId)
+
+        res.status(200).json(avatar)
+        } catch (err) {
+        console.log(err)
+        res.status(404).json({message: 'Deu ruim'})
+        }
+    };
+   
+
+    const fetchAvatar = async (req, res) => {
+        try {
+            const userId = req.userId;
+            let avatarId = req.body.avatarId; //pega o ID do avatar do corpo da requisição
+    
+            //const avatar = await avatarModel.getAvatar(avatarId)
+            const avatar = await avatarModel.getAvatar(avatarId, userId);
+    
+            res.status(200).json(avatar)
+            } catch (err) {
+            console.log(err)
+            res.status(404).json({message: 'Deu ruim'})
+            }
+        };
 
 const saveAvatar = async (req, res) => {
     try {
-        const userId = req.userId; 
-        const { nameAvatar, avatarPath } = req.body;
-        const avatarFilename = avatarPath.split('/').pop(); 
+        const userId = req.userId;
+        let avatarPath = req.body.avatarId; //pega o ID do avatar do corpo da requisição
 
-        await avatarModel.createAvatar(nameAvatar, avatarFilename);
+        avatarPath = avatarPath.replace(/\//g, '\\')
+        //console.log('avatarPath:', avatarPath)
+        const avatarId = await avatarModel.findIdAvatarbyPath(avatarPath)
+        const result = await avatarModel.setAvatar(avatarId[0].ID_Avatar, userId);
 
-        const avatarId = await avatarModel.getAvatar(userId);
-
-        await avatarModel.setAvatar(userId, avatarId);
-
-        res.status(201).json({ message: 'Avatar salvo com sucesso' });
-        
-    } catch (err) {
-        console.error("Erro em saveAvatar:", err);
-        res.status(500).json({ error: 'Erro ao salvar avatar no banco de dados.' });
-    }
-};
-
-const fetchAvatar = async (req, res) => {
-    const userId = req.userId;
-    console.log('userId from token:', userId);
-    try {
-        if (!userId) {
-            return res.status(400).json({ error: 'userId não fornecido' });
+        //console.log('avatar atualizado no banco de dados');
+        res.status(200).json(avatarId)
+        } catch (err) {
+        console.log(err)
+        res.status(404).json({message: 'Deu ruim'})
         }
-        const avatar = await avatarModel.getAvatar(userId);
-        if (avatar) {
-            res.json({ avatarPath: avatar });
-        } else {
-            res.status(404).json({ error: 'Avatar não encontrado' });
-        }
-    } catch (error) {
-        console.error('Erro ao buscar o avatar:', error);
-        res.status(500).json({ error: 'Erro ao buscar o avatar' });
-    }
-};
+    };
+   
 
-module.exports = { listAvatars, saveAvatar, fetchAvatar };
+module.exports = { createAvatar, saveAvatar, fetchAvatar };
 
-
-
-// const avatarModel = require('../models/avatarModel');
-// const path = require('path');
-// const fs = require('fs');
-
-// const listAvatars = async (req, res) => {
-//     try {
-//         const avatarDir = path.join(__dirname, '..', 'assets', 'avatar');
-//         fs.readdir(avatarDir, (err, files) => {
-//             if (err) {
-//                 console.error("Erro ao listar avatares:", err);
-//                 return res.status(500).json({ error: 'Erro ao listar avatares' });
-//             }
-//             res.status(200).json(files);
-//         });
-//     } catch (err) {
-//         console.error("Erro em listAvatars:", err);
-//         res.status(500).json({ error: 'Erro ao listar avatares' });
-//     }
-// };
-
-// const saveAvatar = async (req, res) => {
-//     try {
-//         const userId = req.userId; 
-//         const { nameAvatar, avatarPath } = req.body;
-//         const avatarFilename = avatarPath.split('/').pop(); 
-
-//         await avatarModel.setAvatar(userId, nameAvatar, avatarFilename);
-
-//         res.status(201).json({ message: 'Avatar salvo com sucesso' });
-//     } catch (err) {
-//         console.error("Erro em saveAvatar:", err);
-//         res.status(500).json({ error: 'Erro ao salvar avatar no banco de dados.' });
-//     }
-// };
-
-// const fetchAvatar = async (req, res) => {
-//     const userId = req.userId;
-//     console.log('userId from token:', userId);
-//     try {
-//         if (!userId) {
-//             return res.status(400).json({ error: 'userId não fornecido' });
-//         }
-//         const avatar = await avatarModel.getAvatar(userId);
-//         if (avatar) {
-//             res.json(avatar);
-//         } else {
-//             res.status(404).json({ error: 'Avatar não encontrado' });
-//         }
-//     } catch (error) {
-//         console.error('Erro ao buscar o avatar:', error);
-//         res.status(500).json({ error: 'Erro ao buscar o avatar' });
-//     }
-// };
-
-// module.exports = { listAvatars, saveAvatar, fetchAvatar };
-
-// module.exports = { listAvatars, saveAvatar, fetchAvatar };
