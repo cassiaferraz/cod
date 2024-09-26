@@ -1,5 +1,3 @@
-
-40417764@NSPECO5KFGR04 MINGW64 ~/Documents/P.Individual/progressao/progressao/server/src (master)
 $ git pull
 warning: ----------------- SECURITY WARNING ----------------
 warning: | TLS certificate verification has been disabled! |
@@ -37,3 +35,4 @@ error: The following untracked working tree files would be overwritten by merge:
 Please move or remove them before you merge.
 Aborting
 Merge with strategy ort failed.
+
