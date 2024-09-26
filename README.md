@@ -1,11 +1,8 @@
-40417764@NSPECO5KFGR04 MINGW64 ~/Documents/P.Individual/progressao/progressao/server/src (master)
-$ git add .
-
-40417764@NSPECO5KFGR04 MINGW64 ~/Documents/P.Individual/progressao/progressao/server/src (master)
-$ git commit -m "minhas mudanças locais"
+$ git status
 On branch master
 Your branch and 'origin/master' have diverged,
 and have 1 and 2 different commits each, respectively.
+  (use "git pull" if you want to integrate the remote branch with yours)
 
 Changes not staged for commit:
   (use "git add <file>..." to update what will be committed)
@@ -24,3 +21,4 @@ Untracked files:
         ../../client/public/avatar/
 
 no changes added to commit (use "git add" and/or "git commit -a")
+
