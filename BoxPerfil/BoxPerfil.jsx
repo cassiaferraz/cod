@@ -11,7 +11,7 @@ function BoxPerfil({ serverIP, avatar }) {
   const [xp, setXp] = useState('');
   const [moedas, setMoedas] = useState('');
   const [userName, setUsername] = useState('');
-  const [currentAvatar, setCurrentAvatar] = useState(sessionStorage.getItem('avatar') || usuario);
+  const [currentAvatar, setCurrentAvatar] = useState(usuario);
 
   const token = sessionStorage.getItem('token');
 
@@ -43,11 +43,25 @@ function BoxPerfil({ serverIP, avatar }) {
   }, [serverIP]);
 
   useEffect(() => {
-    if (avatar) {
-      setCurrentAvatar(avatar);
-      sessionStorage.setItem('avatar', avatar);
+    const handleStorageChange = (event) => {
+      if (event.key === 'avatar') {
+        setCurrentAvatar(event.newValue || usuario);
+        //console.log('avatar atualizado no storage', event.newValue);
+      }
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+
+    const storedAvatar = sessionStorage.getItem('avatar');
+    if(storedAvatar){
+      setCurrentAvatar(storedAvatar);
+      //console.log('avatar inicial do localstorage')
     }
-  }, [avatar]);
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+    };
+  }, []);
 
   return (
     <div>
