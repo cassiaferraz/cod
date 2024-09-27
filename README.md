@@ -1,22 +1,19 @@
-import './logout.css'
+const sql = require('mssql/msnodesqlv8')
+const dbConfig = require('../config/dbConfig');
 
-import React from 'react';
+async function dispatchQuery(sqlString){
+    try { 
+        const connection = await sql.connect(dbConfig);
+        var request = new sql.Request();
+        const result = await request.query(sqlString);
+        return result.recordset;
+    } catch(err) {
+        console.log('\n ------------------ erro na requisição ------------ \n\n')
+        console.log(err)
+        console.log('\n\n ------------------ erro na requisição ------------ \n')
+    }
+}
 
-const handleLogout = () => {
-    
-    sessionStorage.removeItem('token'); 
-    sessionStorage.removeItem('userId'); 
-
-    //sessionStorage.removeItem('avatar'); 
-
-    window.location.href = '/'; 
-};
-
-function LogoutButton () {
-
-    return (
-        <button className= "logout" onClick={handleLogout}>Sair</button>
-    );
-};
-
-export default LogoutButton;
+module.exports = {
+    dispatchQuery
+}
