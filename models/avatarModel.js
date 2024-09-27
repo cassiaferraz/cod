@@ -1,79 +1,52 @@
-
 const sqlServer = require('../utils/sqlServer');
 
-async function createAvatar(nameAvatar, avatarFilename) {
-    const sql = `
-        INSERT INTO UserAvatars (nameAvatar, avatarPath)
-        VALUES ('${nameAvatar}', '${avatarFilename}')
-        ON DUPLICATE KEY UPDATE
-        nameAvatar = VALUES(nameAvatar),
-        avatarPath = VALUES(avatarPath)
-    `;
-    await sqlServer.dispatchQuery(sql);
+async function createAvatar(data) {
+    console.log('execuando create');
+
+        const sql = `INSERT INTO dbo.AVATAR_do_COLABORADOR (ID_COLABORADOR, ID_Avatar) 
+        VALUES ( '${data.userId}', '${data.avatarId}')`;
+        const result = sqlServer.dispatchQuery(sql);
+        return result;
+
 }
+
+// async function getAvatar(avatarId, userId) {
+//     const sql = `
+//         SELECT U.ID_Avatar, U.nameAvatar, U.avatarPath
+//         FROM UserAvatars U
+//         LEFT JOIN AVATAR_do_COLABORADOR A ON U.ID_Avatar = '${avatarId}'
+//         WHERE A.ID_COLABORADOR = '${userId}'
+//     `;
+//     const params = {avatarId, userId };
+//     const result = await sqlServer.dispatchQuery(sql, params);
+//     return result;
+// }
 
 async function getAvatar(userId) {
-    const sql = `
-        SELECT U.AVATARPATH 
-        FROM UserAvatars U
-        JOIN avatar_do_colaborador A ON U.ID_AVATAR = A.ID_AVATAR
-        WHERE A.ID_COLABORADOR = '${userId}'
-    `;
-    const [result] = await sqlServer.dispatchQuery(sql);
-    return result ? result.AVATARPATH : null;
+    const sql = `SELECT ID_Avatar FROM dbo.AVATAR_do_COLABORADOR WHERE ID_COLABORADOR = '${userId}'`
+    //const params = { avatarId, userId };
+    const results = await sqlServer.dispatchQuery(sql);
+    return results;
 }
 
-async function setAvatar(userId, avatarId) {
-    const sql = `
-        INSERT INTO avatar_do_colaborador (ID_COLABORADOR, ID_AVATAR)
-        VALUES ('${userId}', '${avatarId}')
-        ON DUPLICATE KEY UPDATE ID_AVATAR = VALUES(ID_AVATAR)
-    `;
-    await sqlServer.dispatchQuery(sql);
+async function setAvatar(avatarId, userId) {
+    const sql = `UPDATE dbo.AVATAR_do_COLABORADOR SET ID_Avatar = '${avatarId}' WHERE ID_COLABORADOR = '${userId}'`;
+    const params = { avatarId, userId };
+    const results = await sqlServer.dispatchQuery(sql, params);
+    return results;
+}  
+
+async function findIdAvatarbyPath(avatarPath) {
+    const sql = `SELECT ID_Avatar FROM dbo.UserAvatars WHERE avatarPath = '${avatarPath}'`
+    const results = await sqlServer.dispatchQuery(sql);
+    return results;
 }
 
 module.exports = {
     createAvatar,
     getAvatar,
-    setAvatar
+    setAvatar,
+    findIdAvatarbyPath
 };
 
 
-
-
-
-// const sqlServer = require('../utils/sqlServer');
-
-// async function createOrUpdateAvatar(userId, nameAvatar, avatarFilename) {
-//     const sql = `INSERT INTO UserAvatars (ID_COLABORADOR, nameAvatar, avatarPath) 
-//                  VALUES ('${userId}', '${nameAvatar}', '${avatarFilename}')
-//                  ON DUPLICATE KEY UPDATE nameAvatar = '${nameAvatar}', avatarPath = '${avatarFilename}'`;
-//     const results = await sqlServer.dispatchQuery(sql);
-//     return results;
-// }
-
-// async function getAvatar(userId) {
-//     const sql = `SELECT nameAvatar, avatarPath FROM UserAvatars WHERE ID_COLABORADOR = '${userId}'`;
-//     try {
-//         const results = await sqlServer.dispatchQuery(sql);
-//         console.log('Resultados da consulta:', results);
-//         return results[0] || {}; 
-//     } catch (error) {
-//         console.error('Erro na consulta SQL:', error);
-//         throw error;
-//     }
-// }
-
-// async function setAvatar(userId, avatarPath) {
-//     const sql = `UPDATE UserAvatars 
-//                  SET avatarPath = '${avatarPath}' 
-//                  WHERE ID_COLABORADOR = '${userId}'`;
-//     const results = await sqlServer.dispatchQuery(sql);
-//     return results;
-// }
-
-// module.exports = {
-//     createOrUpdateAvatar,
-//     getAvatar,
-//     setAvatar
-// };
