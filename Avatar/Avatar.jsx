@@ -6,36 +6,47 @@ import './Avatar.css';
 import Swal from 'sweetalert2';
 import BackArrow from "/img/svgs/voltar.svg";
 import LogoutButton from "../../userSessions/Logout/LogoutButton"
+import { useAvatar } from '../../Context/AvatarContext';
+
+
 
 export default function Avatar({ serverIP }) {
+    const { avatar, setAvatar } = useAvatar();
     const token = sessionStorage.getItem("token");
     const userId = sessionStorage.getItem('userId');
-    
+    const [selectedAvatar, setSelectedAvatar] = useState(null);
+
+
     if (!token) {
         window.location.href = "/";
     }
 
-    const [avatar, setAvatar] = useState(null);
-    const [selectedAvatar, setSelectedAvatar] = useState(null);
- 
+    
     useEffect(() => {
         if (token) {
-            //console.log('Fetching avatar');
             fetch(`${serverIP}/avatar/get-avatar?userId=${userId}`, {
                 headers: {
                     'x-access-token': token
                 }
             })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Erro ao buscar o avatar');
-                    }
-                    return response.json();
-                })
-                .then(data => setAvatar(data.avatarId))
-                .catch(error => console.error('Erro ao buscar o avatar:', error));
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Erro ao buscar o avatar');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data && data.avatarPath) {
+                    setAvatar(data.avatarPath); // Armazene o caminho da imagem
+                } 
+            
+                else {
+                    console.error('Caminho do avatar não encontrado na resposta:', data);
+                }
+            })
+            .catch(error => console.error('Erro ao buscar o avatar:', error));
         } else {
-            console.error('user id não encontrado no sessionStorage');
+            console.error('User ID não encontrado no sessionStorage');
         }
     }, [serverIP, token]);
 
