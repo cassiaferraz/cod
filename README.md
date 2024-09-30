@@ -1,145 +1,65 @@
-import React, { useState, useEffect } from 'react';
-import BoxPerfil from "../BoxPerfil/BoxPerfil";
-import Navmenu from '../../Navbar/Navmenu';
-import AvatarSelector from './AvatarSelector';
-import './Avatar.css';
-import Swal from 'sweetalert2';
-import BackArrow from "/img/svgs/voltar.svg";
-import LogoutButton from "../../userSessions/Logout/LogoutButton";
-import { useAvatar } from '../../Context/AvatarContext';
-import { Link } from 'react-router-dom'
+const avatarModel = require('../models/avatarModel');
+const path = require('path');
+const fs = require('fs');
 
+const createAvatar = async (req, res) => {
+    try {
+        const userId = req.userId
+        const avatarId = req.body.avatarId;
+        const result = await avatarModel.setAvatar(avatarId[0].ID_Avatar, userId);
 
-export default function Avatar({ serverIP }) {
-    const { avatar, setAvatar } = useAvatar();
-    const token = sessionStorage.getItem("token");
-    const userId = sessionStorage.getItem('userId');
-    const [selectedAvatar, setSelectedAvatar] = useState(null);
-
-    if (!token) {
-        window.location.href = "/";
+        console.log('avatar criado no banco de dados');
+        res.status(200).json(result)
+    } catch (err) {
+        console.log(err)
+        res.status(404).json({message: 'Deu ruim'})
     }
-
-    useEffect(() => {
-        if (token) {
-            fetch(`${serverIP}/avatar/get-avatar?userId=${userId}`, {
-                headers: {
-                    'x-access-token': token
-                }
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Erro ao buscar o avatar');
-                }
-                return response.json();
-            })
-            .then(data => {
-                if (data && data.avatarPath) {
-                    // Atualize para usar avatarId em vez de avatarPath
-                    setAvatar(data.avatarPath); // Armazene o ID do avatar
-                } else {
-                    console.error('ID do avatar não encontrado na resposta:', data);
-                }
-            })
-            .catch(error => console.error('Erro ao buscar o avatar:', error));
-        } else {
-            console.error('User ID não encontrado no sessionStorage');
-        }
-    }, [serverIP, token, setAvatar, userId]); // Inclua userId como dependência
-
-    const handleAvatarSelect = (avatar) => {
-        setSelectedAvatar(avatar);
     };
 
-    const handleSaveAvatar = async () => {
-        if (selectedAvatar && userId && token) {
-            try {
-                const response = await fetch(`${serverIP}/avatar/set-avatar`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'x-access-token': token
-                    },
-                    body: JSON.stringify({ userId: userId, avatarId: selectedAvatar })
-                });
+const fetchAvatar = async (req, res) => {
+    try {
+        const userId = req.userId;
 
-                if (response.ok) {
-                    const data = await response.json();
-                    setAvatar(selectedAvatar); // Atualize o avatar no contexto
-                    sessionStorage.setItem('avatar', selectedAvatar);
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Alterado!',
-                        text: 'Avatar atualizado com sucesso!',
-                    });
-                } else {
-                    const errorData = await response.json();
-                    console.log('erro na resposta:', errorData);
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Erro!',
-                        text: `Erro ao atualizar o avatar: ${response.statusText}`,
-                    });
-                }
-            } catch (error) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Erro!',
-                    text: `Erro ao atualizar o avatar: ${error.message}`,
-                });
+        // Primeiro, busque o ID_Avatar na tabela AVATAR_do_COLABORADOR
+        const avatarData = await avatarModel.getAvatar(userId);
+        
+        if (avatarData && avatarData.length > 0) {
+            const avatarId = avatarData[0].ID_Avatar;
+
+            // Agora busque o caminho da imagem usando o avatarId
+            const avatarDetails = await avatarModel.getAvatarDetails(avatarId);
+            if (avatarDetails && avatarDetails.length > 0) {
+                res.status(200).json({ avatarPath: avatarDetails[0].avatarPath });
+            } else {
+                res.status(404).json({ message: 'Detalhes do avatar não encontrados' });
             }
         } else {
-            Swal.fire({
-                icon: 'error',
-                title: 'Erro!',
-                text: 'User ID ou token não encontrado. Por favor, faça login novamente.',
-            });
+            res.status(404).json({ message: 'Avatar não encontrado' });
+        }
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ message: 'Erro ao buscar avatar' });
+    }
+};
+
+const saveAvatar = async (req, res) => {
+    try {
+        const userId = req.userId;
+        let avatarPath = req.body.avatarId; //pega o ID do avatar do corpo da requisição
+
+        avatarPath = avatarPath.replace(/\//g, '\\')
+        //console.log('avatarPath:', avatarPath)
+        const avatarId = await avatarModel.findIdAvatarbyPath(avatarPath)
+        const result = await avatarModel.setAvatar(avatarId[0].ID_Avatar, userId);
+
+        //console.log('avatar atualizado no banco de dados');
+        res.status(200).json(avatarId)
+        } catch (err) {
+        console.log(err)
+        res.status(404).json({message: 'Deu ruim'})
         }
     };
+   
 
-    return (
-        <div className="todocontainer">
-            <BoxPerfil serverIP={serverIP} avatar={avatar} />
-            <Navmenu />
-            <div className='header-avatar'>
-                <div id="sair-app">
-                <Link to= '/perfil'><img
-                            className="btn-backPage"
-                            src={BackArrow}
-                            alt="Voltar"
-                        />
-                    </Link>
-                    <h2 id='titulopagina'>Selecione seu Avatar</h2>
-                    <LogoutButton />
-                </div>
-                <div className='avatares-options'>
-                    <AvatarSelector onSelect={handleAvatarSelect} />
-                    {selectedAvatar && <p>Avatar Selecionado: {selectedAvatar.split('/').pop().replace('.png', '')}</p>}
-                </div>
-                <button className='alterar-avatar' onClick={handleSaveAvatar}>
-                    Alterar Avatar
-                </button>
-            </div>
-        </div>
-    );
-}
+module.exports = { createAvatar, saveAvatar, fetchAvatar };
 
-//create:
-
-// routes/avatarRoutes.js
-
-const express = require('express');
-const app = express.Router();
-const avatarController = require('../controller/avatarController');
-const authenticateToken = require('../middleware/authMiddleware');
-
-// Rota para criar avatares
-app.get('/create-avatar', authenticateToken, avatarController.createAvatar);
-
-// Rota para salvar o avatar
-app.post('/set-avatar', authenticateToken, avatarController.saveAvatar);
-
-// Rota para obter o avatar
-app.get('/get-avatar', authenticateToken, avatarController.fetchAvatar);
-
-module.exports = app;
