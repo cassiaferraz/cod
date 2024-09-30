@@ -1,65 +1,59 @@
-const avatarModel = require('../models/avatarModel');
-const path = require('path');
-const fs = require('fs');
+const sqlServer = require('../utils/sqlServer');
 
-const createAvatar = async (req, res) => {
-    try {
-        const userId = req.userId
-        const avatarId = req.body.avatarId;
-        const result = await avatarModel.setAvatar(avatarId[0].ID_Avatar, userId);
+async function createAvatar(data) {
+    console.log('execuando create');
 
-        console.log('avatar criado no banco de dados');
-        res.status(200).json(result)
-    } catch (err) {
-        console.log(err)
-        res.status(404).json({message: 'Deu ruim'})
-    }
-    };
+        const sql = `INSERT INTO dbo.AVATAR_do_COLABORADOR (ID_COLABORADOR, ID_Avatar) 
+        VALUES ( '${data.userId}', '${data.avatarId}')`;
+        const result = sqlServer.dispatchQuery(sql);
+        return result;
 
-const fetchAvatar = async (req, res) => {
-    try {
-        const userId = req.userId;
+}
 
-        // Primeiro, busque o ID_Avatar na tabela AVATAR_do_COLABORADOR
-        const avatarData = await avatarModel.getAvatar(userId);
-        
-        if (avatarData && avatarData.length > 0) {
-            const avatarId = avatarData[0].ID_Avatar;
+// async function getAvatar(avatarId, userId) {
+//     const sql = `
+//         SELECT U.ID_Avatar, U.nameAvatar, U.avatarPath
+//         FROM UserAvatars U
+//         LEFT JOIN AVATAR_do_COLABORADOR A ON U.ID_Avatar = '${avatarId}'
+//         WHERE A.ID_COLABORADOR = '${userId}'
+//     `;
+//     const params = {avatarId, userId };
+//     const result = await sqlServer.dispatchQuery(sql, params);
+//     return result;
+// }
 
-            // Agora busque o caminho da imagem usando o avatarId
-            const avatarDetails = await avatarModel.getAvatarDetails(avatarId);
-            if (avatarDetails && avatarDetails.length > 0) {
-                res.status(200).json({ avatarPath: avatarDetails[0].avatarPath });
-            } else {
-                res.status(404).json({ message: 'Detalhes do avatar não encontrados' });
-            }
-        } else {
-            res.status(404).json({ message: 'Avatar não encontrado' });
-        }
-    } catch (err) {
-        console.log(err);
-        res.status(500).json({ message: 'Erro ao buscar avatar' });
-    }
+async function getAvatar(userId) {
+    const sql = `SELECT ID_Avatar FROM dbo.AVATAR_do_COLABORADOR WHERE ID_COLABORADOR = '${userId}'`
+    //const params = { avatarId, userId };
+    const results = await sqlServer.dispatchQuery(sql);
+    return results;
+}
+
+async function setAvatar(avatarId, userId) {
+    const sql = `UPDATE dbo.AVATAR_do_COLABORADOR SET ID_Avatar = '${avatarId}' WHERE ID_COLABORADOR = '${userId}'`;
+    const params = { avatarId, userId };
+    const results = await sqlServer.dispatchQuery(sql, params);
+    return results;
+}  
+
+async function findIdAvatarbyPath(avatarPath) {
+    const sql = `SELECT ID_Avatar FROM dbo.UserAvatars WHERE avatarPath = '${avatarPath}'`
+    const results = await sqlServer.dispatchQuery(sql);
+    return results;
+}
+
+async function getAvatarDetails(avatarId) {
+    const sql = `SELECT avatarPath FROM UserAvatars WHERE ID_Avatar = '${avatarId}'`;
+    const results = await sqlServer.dispatchQuery(sql);
+    return results;
+}
+
+module.exports = {
+    createAvatar,
+    getAvatar,
+    setAvatar,
+    getAvatarDetails,
+    findIdAvatarbyPath
 };
 
-const saveAvatar = async (req, res) => {
-    try {
-        const userId = req.userId;
-        let avatarPath = req.body.avatarId; //pega o ID do avatar do corpo da requisição
-
-        avatarPath = avatarPath.replace(/\//g, '\\')
-        //console.log('avatarPath:', avatarPath)
-        const avatarId = await avatarModel.findIdAvatarbyPath(avatarPath)
-        const result = await avatarModel.setAvatar(avatarId[0].ID_Avatar, userId);
-
-        //console.log('avatar atualizado no banco de dados');
-        res.status(200).json(avatarId)
-        } catch (err) {
-        console.log(err)
-        res.status(404).json({message: 'Deu ruim'})
-        }
-    };
-   
-
-module.exports = { createAvatar, saveAvatar, fetchAvatar };
 
