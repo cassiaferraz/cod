@@ -1,17 +1,17 @@
 import usuario from '/img/svgs/avatarmasculino.png';
 import BarraProgresso from '../Progresso/BarraProgresso';
 import coin from '/img/svgs/Dolar_Dinero_Moneda_1Light.svg';
+import notificacao from '../../../../public/img/svgs/notificacao.svg'
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import '../BoxPerfil/boxperfil.css';
-
 
 function BoxPerfil({ serverIP, avatar }) {
   const [nivel, setNivel] = useState('');
   const [xp, setXp] = useState('');
   const [moedas, setMoedas] = useState('');
   const [userName, setUsername] = useState('');
-  const [currentAvatar, setCurrentAvatar] = useState(usuario);
+  const [currentAvatar, setCurrentAvatar] = useState(usuario); // Avatar padrão
 
   const token = sessionStorage.getItem('token');
 
@@ -43,30 +43,19 @@ function BoxPerfil({ serverIP, avatar }) {
   }, [serverIP]);
 
   useEffect(() => {
-    const handleStorageChange = (event) => {
-      if (event.key === 'avatar') {
-        setCurrentAvatar(event.newValue || usuario);
-        //console.log('avatar atualizado no storage', event.newValue);
-      }
-    };
-
-    window.addEventListener('storage', handleStorageChange);
-
-    const storedAvatar = sessionStorage.getItem('avatar');
-    if(storedAvatar){
-      setCurrentAvatar(storedAvatar);
-      //console.log('avatar inicial do localstorage')
+    // Atualiza o avatar com base no que vem do props
+    if (avatar) {
+      setCurrentAvatar(avatar);
+    } else {
+      setCurrentAvatar(usuario); 
     }
-
-    return () => {
-      window.removeEventListener('storage', handleStorageChange);
-    };
-  }, []);
+  }, [avatar]);
 
   return (
     <div>
       <Link to="/Perfil" style={{ textDecoration: 'none' }}>
         <header className="header-perfil">
+          <img id= "notificacao" src={notificacao} alt="not" />
           <img className="icon-usuario" src={currentAvatar} alt="usuario" />
           <div className="info">
             <div className="nome-e-nivel">
@@ -81,6 +70,7 @@ function BoxPerfil({ serverIP, avatar }) {
               <img className='coin' src={coin} alt="Ícone de Moedas" />
               {moedas}
             </div>
+              
           </div>
         </header>
       </Link>
