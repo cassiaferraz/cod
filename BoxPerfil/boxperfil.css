@@ -57,3 +57,14 @@
   white-space: nowrap;
   animation: typing 2.5s steps(40, end), blink-caret .75s step-end infinite;
 }
+
+.badge {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: red;
+  color: white;
+  border-radius: 50%;
+  padding: 0.2rem 0.4rem;
+  font-size: 0.8rem;
+}
