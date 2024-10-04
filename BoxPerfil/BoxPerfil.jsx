@@ -1,4 +1,4 @@
-  import usuario from '/img/svgs/avatarmasculino.png';
+import usuario from '/img/svgs/avatarmasculino.png';
 import BarraProgresso from '../Progresso/BarraProgresso';
 import coin from '/img/svgs/Dolar_Dinero_Moneda_1Light.svg';
 import { Link } from 'react-router-dom';
@@ -13,11 +13,13 @@ function BoxPerfil({ serverIP, avatar }) {
   const [moedas, setMoedas] = useState('');
   const [userName, setUsername] = useState('');
   const [currentAvatar, setCurrentAvatar] = useState(usuario);
+  const [notifications, setNotifications] = useState([]); // Estado para notificações
 
   const token = sessionStorage.getItem('token');
 
+  // Função para buscar dados do usuário
   useEffect(() => {
-    async function fetchData() {
+    async function fetchUserData() {
       try {
         const response = await fetch(`${serverIP}/getUserData`, {
           method: 'GET',
@@ -32,13 +34,35 @@ function BoxPerfil({ serverIP, avatar }) {
         setNivel(data.NIVEL);
         setXp(data.XP);
       } catch (error) {
-        console.log('Erro ao buscar os dados:', error);
+        console.log('Erro ao buscar os dados do usuário:', error);
       }
     }
 
-    fetchData();
-  }, [serverIP]);
+    fetchUserData();
+  }, [serverIP, token]);
 
+  // Função para buscar notificações
+  useEffect(() => {
+    async function fetchNotifications() {
+      try {
+        const response = await fetch(`${serverIP}/getNotifications`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-access-token': token
+          }
+        });
+        const data = await response.json();
+        setNotifications(data); // Atualiza o estado das notificações
+      } catch (error) {
+        console.log('Erro ao buscar notificações:', error);
+      }
+    }
+
+    fetchNotifications();
+  }, [serverIP, token]);
+
+  // Atualiza o avatar caso o prop altere
   useEffect(() => {
     if (avatar) {
       setCurrentAvatar(avatar);
@@ -51,8 +75,8 @@ function BoxPerfil({ serverIP, avatar }) {
     <div>
       <Link to="/Perfil" style={{ textDecoration: 'none' }}>
         <header className="header-perfil">
-          {/* Substitui o ícone de notificação pelo componente Notifications */}
-          <Notifications />  
+          {/* Passa as notificações para o componente Notifications */}
+          <Notifications notifications={notifications} />  
           <img className="icon-usuario" src={currentAvatar} alt="usuario" />
           <div className="info">
             <div className="nome-e-nivel">
