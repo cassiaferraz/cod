@@ -4,8 +4,7 @@ import coin from '/img/svgs/Dolar_Dinero_Moneda_1Light.svg';
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import '../BoxPerfil/boxperfil.css';
-
-import Notifications from '../../Notificação/Notifications'; // Importa o componente de notificações
+import fetchUserNotifications from '../../services/notification'; // Importa o serviço de notificações
 
 function BoxPerfil({ serverIP, avatar }) {
   const [nivel, setNivel] = useState('');
@@ -13,13 +12,12 @@ function BoxPerfil({ serverIP, avatar }) {
   const [moedas, setMoedas] = useState('');
   const [userName, setUsername] = useState('');
   const [currentAvatar, setCurrentAvatar] = useState(usuario);
-  const [notifications, setNotifications] = useState([]); // Estado para notificações
+  const [notifications, setNotifications] = useState([]); // Estado para armazenar notificações
 
   const token = sessionStorage.getItem('token');
 
-  // Função para buscar dados do usuário
   useEffect(() => {
-    async function fetchUserData() {
+    async function fetchData() {
       try {
         const response = await fetch(`${serverIP}/getUserData`, {
           method: 'GET',
@@ -34,35 +32,27 @@ function BoxPerfil({ serverIP, avatar }) {
         setNivel(data.NIVEL);
         setXp(data.XP);
       } catch (error) {
-        console.log('Erro ao buscar os dados do usuário:', error);
+        console.log('Erro ao buscar os dados:', error);
       }
     }
 
-    fetchUserData();
-  }, [serverIP, token]);
+    fetchData();
+  }, [serverIP]);
 
-  // Função para buscar notificações
   useEffect(() => {
     async function fetchNotifications() {
-      try {
-        const response = await fetch(`${serverIP}/getNotifications`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'x-access-token': token
-          }
-        });
+      const response = await fetchUserNotifications({ token, serverIP });
+      if (response && response.ok) {
         const data = await response.json();
-        setNotifications(data); // Atualiza o estado das notificações
-      } catch (error) {
-        console.log('Erro ao buscar notificações:', error);
+        setNotifications(data); // Define as notificações no estado
+      } else {
+        console.log('Erro ao buscar notificações:', response.statusText);
       }
     }
 
     fetchNotifications();
-  }, [serverIP, token]);
+  }, [token, serverIP]); // Adiciona token e serverIP como dependências
 
-  // Atualiza o avatar caso o prop altere
   useEffect(() => {
     if (avatar) {
       setCurrentAvatar(avatar);
@@ -75,8 +65,12 @@ function BoxPerfil({ serverIP, avatar }) {
     <div>
       <Link to="/Perfil" style={{ textDecoration: 'none' }}>
         <header className="header-perfil">
-          {/* Passa as notificações para o componente Notifications */}
-          <Notifications notifications={notifications} />  
+          {/* Exibe as notificações, você pode ajustar como quiser */}
+          <div className="notifications">
+            {notifications.map((notif) => (
+              <div key={notif.id}>{notif.text}</div>
+            ))}
+          </div>
           <img className="icon-usuario" src={currentAvatar} alt="usuario" />
           <div className="info">
             <div className="nome-e-nivel">
