@@ -1,12 +1,12 @@
 import { useEffect, useState, useRef } from 'react'
 
 import './notification.css'
-import notification from '../../../public/img/svgs/notificacao.svg'
+import notification_foto from '../../../public/img/svgs/notificacao.svg'
 import NotificationItem from './notificationItem/NotificationItem'
 import fetchUserNotifications from '../../services/notifications/fetchUserNotifications'
 import React from 'react'
 
-export default function Notifications() {
+export default function Notifications({notification}) {
 
     const divRef = useRef(null)
 
@@ -23,47 +23,48 @@ export default function Notifications() {
     }, []);
 
     const token = sessionStorage.getItem('token')
-    // const { token } = useContext(UserContext)
 
-    const [ notificationList, setNotificationList ] = useState([])
+    //const [ notificationList, setNotificationList ] = useState([])
     const [ isMenuOpened, setIsMenuOpened ] = useState(false)
 
-    useEffect(() => {
-        const fetchData = async() => {
-            const data = await fetchUserNotifications(token)
-            if(data) setNotificationList(data)
-        } 
-        fetchData()
+    // useEffect(() => {
+    //     const fetchData = async() => {
+    //         const data = await fetchUserNotifications(token)
+    //         if(data) setNotificationList(data)
+    //     } 
+    //     fetchData()
 
-        const intervalo = setInterval(() => {
-            fetchData()
-        }, 30000) // Atualiza a cada 30 segundos!
+    //     const intervalo = setInterval(() => {
+    //         fetchData()
+    //     }, 30000) // Atualiza a cada 30 segundos!
 
-        return () => clearInterval(intervalo);
+    //     return () => clearInterval(intervalo);
 
-    }, [ token ])  
+    // }, [ token ])  
 
-    const removeNotificationFromList = (idNotification) => {
-        let aux = [...notificationList];
-        aux = aux.filter(not => not.ID_NOTIFICACAO != idNotification)
-        setNotificationList(aux)
-    }
+    // const removeNotificationFromList = (idNotification) => {
+    //     let aux = [...notificationList];
+    //     aux = aux.filter(not => not.ID_NOTIFICACAO != idNotification)
+    //     setNotificationList(aux)
+    // }
 
     return (
         <div className='notifications_menu' ref={divRef}>
             <div className='notification_icon'  onClick={(e) => setIsMenuOpened(prev => !prev)}>
-                <img src={notification}/>
-                { notificationList?.length > 0 ? 
-                    <div className='notification_number'>{notificationList.length}</div>
+                <img src={notification_foto}/>
+                { notification?.length > 0 ? 
+                    <div className='notification_number'>{notification.length}</div>
                 : ''}
             </div>
             <div className='notifications_dropdown' style={ isMenuOpened ? {} : {display: 'none'}}>
                 <div className='arrow'></div>
-                { notificationList?.length > 0 ? 
-                    notificationList.map((item, index) => 
+                { notification?.length > 0 ? 
+                    notification.map((item, index) => 
                         <React.Fragment key={`notification_${item?.TEXTO}_${index}`}>
-                            <NotificationItem notification={item} handleExclusion={removeNotificationFromList} />
-                            { index != notificationList.length - 1 ? <div className='division'></div> : '' }
+                            <NotificationItem notification={item}
+                            //  handleExclusion={removeNotificationFromList}
+                              />
+                            { index != notification.length - 1 ? <div className='division'></div> : '' }
                         </React.Fragment>
                     )
                 : 'Sem notificações pendentes'}
