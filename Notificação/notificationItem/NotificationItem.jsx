@@ -4,19 +4,15 @@ import fetchDeleteNotification from "../../../services/notifications/fetchDelete
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-export default function NotificationItem({ serverIP, notification, handleExclusion }) {
+export default function NotificationItem({ serverIP, notification, handleRead, handleDelete }) {
   const navigate = useNavigate();
   const [isRead, setIsRead] = useState(notification?.STATUS_LEITURA);
   const token = sessionStorage.getItem('token');
 
-  const handleOnClick = async (e) => {
+  const handleOnClick = async () => {
     if (!notification?.STATUS_LEITURA) {
-      const response = await fetchReadNotification({ token, notificationId: notification?.ID_NOTIFICACAO, serverIP });
-      if (!response.ok) {
-        alert("Erro ao marcar notificação como lida");
-      } else {
-        setIsRead(true); // Marca como lida no estado
-      }
+      await handleRead(); // Chama a função de leitura do pai
+      setIsRead(true); // Marca como lida no estado
     }
 
     if (notification.REFERENCIA?.path) {
@@ -26,12 +22,7 @@ export default function NotificationItem({ serverIP, notification, handleExclusi
 
   const handleExcludeNotification = async () => {
     console.log('Excluindo notificação...');
-    const response = await fetchDeleteNotification({ token, notificationId: notification?.ID_NOTIFICACAO, serverIP });
-    if (!response.ok) {
-      alert('Erro ao excluir notificação');
-    } else {
-      handleExclusion(notification?.ID_NOTIFICACAO); // Remove a notificação da lista
-    }
+    await handleDelete(); // Chama a função de exclusão do pai
   };
 
   return (
