@@ -11,6 +11,7 @@ export default function Notifications({ notification, serverIP }) {
   const divRef = useRef(null);
   const token = sessionStorage.getItem('token');
   const [isMenuOpened, setIsMenuOpened] = useState(false);
+  const [notifications, setNotifications] = useState(notification);
 
   const handleClickOutside = (e) => {
     if (divRef.current && !divRef.current.contains(e.target)) {
@@ -46,30 +47,29 @@ export default function Notifications({ notification, serverIP }) {
   };
 
   const removeNotificationFromList = (notificationId) => {
-    // Atualize o array de notificações após excluir ou marcar como lida
-    let aux = [...notification];
+    let aux = [...notifications];
     aux = aux.filter((not) => not.ID_NOTIFICACAO !== notificationId);
     setNotifications(aux);
   };
 
   return (
     <div className='notifications_menu' ref={divRef}>
-      <div className='notification_icon' onClick={(e) => setIsMenuOpened((prev) => !prev)}>
+      <div className='notification_icon' onClick={() => setIsMenuOpened((prev) => !prev)}>
         <img src={notification_foto} />
-        {notification?.length > 0 ? <div className='notification_number'>{notification.length}</div> : ''}
+        {notifications?.length > 0 ? <div className='notification_number'>{notifications.length}</div> : ''}
       </div>
       <div className='notifications_dropdown' style={isMenuOpened ? {} : { display: 'none' }}>
         <div className='arrow'></div>
-        {notification?.length > 0 ? (
-          notification.map((item, index) => (
+        {notifications?.length > 0 ? (
+          notifications.map((item, index) => (
             <React.Fragment key={`notification_${item?.TEXTO}_${index}`}>
               <NotificationItem
                 notification={item}
                 handleRead={() => handleReadNotification(item.ID_NOTIFICACAO)} // Passa a função de leitura
                 handleDelete={() => handleDeleteNotification(item.ID_NOTIFICACAO)} // Passa a função de exclusão
-              
+                serverIP={serverIP} // Passa o serverIP para o componente filho
               />
-              {index !== notification.length - 1 ? <div className='division'></div> : ''}
+              {index !== notifications.length - 1 ? <div className='division'></div> : ''}
             </React.Fragment>
           ))
         ) : (
