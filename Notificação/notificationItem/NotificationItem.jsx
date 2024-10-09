@@ -4,11 +4,10 @@ import fetchDeleteNotification from "../../../services/notifications/fetchDelete
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-export default function NotificationItem({ notification, handleExclusion }) {
+export default function NotificationItem({ serverIP, notification, handleExclusion }) {
   const navigate = useNavigate();
   const [isRead, setIsRead] = useState(notification?.STATUS_LEITURA);
   const token = sessionStorage.getItem('token');
-  const serverIP = 'http://seu-server-ip'; // Defina o IP do servidor
 
   const handleOnClick = async (e) => {
     if (!notification?.STATUS_LEITURA) {
