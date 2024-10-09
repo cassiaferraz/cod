@@ -5,8 +5,8 @@ import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import '../BoxPerfil/boxperfil.css';
 
-import Notifications from '../../Notificação/Notifications'; // Importa o componente de notificações
-import fetchUserNotifications from '../../services/notification'; // Importa a função de buscar notificações
+import Notifications from '../../Notificação/Notifications'; 
+import fetchUserNotifications from '../../../services/notifications/fetchUserNotifications';
 
 function BoxPerfil({ serverIP, avatar }) {
   const [nivel, setNivel] = useState('');
@@ -47,6 +47,7 @@ function BoxPerfil({ serverIP, avatar }) {
         const response = await fetchUserNotifications({ token, serverIP });
         if (response.ok) {
           const data = await response.json();
+          console.log('Notificações recebidas:', data);
           setNotifications(data);
         } else {
           console.error('Erro ao buscar notificações:', response.statusText);
@@ -69,9 +70,11 @@ function BoxPerfil({ serverIP, avatar }) {
 
   return (
     <div>
+      
       <Link to="/Perfil" style={{ textDecoration: 'none' }}>
         <header className="header-perfil">
-          <Notifications notifications={notifications} />  {/* Passa as notificações para o componente */}
+          <Notifications notification={notifications} />  {/* Passa as notificações para o componente */}
+          
           <img className="icon-usuario" src={currentAvatar} alt="usuario" />
           <div className="info">
             <div className="nome-e-nivel">
