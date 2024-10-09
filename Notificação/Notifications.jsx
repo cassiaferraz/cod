@@ -7,7 +7,7 @@ import fetchDeleteNotification from '../../services/notifications/fetchDeleteNot
 import fetchReadNotification from '../../services/notifications/fetchReadNotification';
 import React from 'react';
 
-export default function Notifications({ notification }) {
+export default function Notifications({ notification, serverIP }) {
   const divRef = useRef(null);
   const token = sessionStorage.getItem('token');
   const [isMenuOpened, setIsMenuOpened] = useState(false);
@@ -26,7 +26,7 @@ export default function Notifications({ notification }) {
   }, []);
 
   const handleReadNotification = async (notificationId) => {
-    const response = await fetchReadNotification({ token, notificationId, serverIP: 'http://seu-server-ip' });
+    const response = await fetchReadNotification({ token, notificationId, serverIP });
     if (response && response.ok) {
       console.log(`Notificação ${notificationId} marcada como lida.`);
       removeNotificationFromList(notificationId); // Atualiza o estado
@@ -36,7 +36,7 @@ export default function Notifications({ notification }) {
   };
 
   const handleDeleteNotification = async (notificationId) => {
-    const response = await fetchDeleteNotification({ token, notificationId, serverIP: 'http://seu-server-ip' });
+    const response = await fetchDeleteNotification({ token, notificationId, serverIP });
     if (response && response.ok) {
       console.log(`Notificação ${notificationId} excluída.`);
       removeNotificationFromList(notificationId); // Remove do estado
@@ -67,6 +67,7 @@ export default function Notifications({ notification }) {
                 notification={item}
                 handleRead={() => handleReadNotification(item.ID_NOTIFICACAO)} // Passa a função de leitura
                 handleDelete={() => handleDeleteNotification(item.ID_NOTIFICACAO)} // Passa a função de exclusão
+              
               />
               {index !== notification.length - 1 ? <div className='division'></div> : ''}
             </React.Fragment>
