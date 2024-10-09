@@ -31,7 +31,7 @@ export default function NotificationItem({ serverIP, notification, handleRead, h
         {notification?.TEXTO}
       </div>
       <div className="actions">
-        <FaTrash className="trash" onClick={handleExcludeNotification} />
+        <FaTrash className="trash" onClick={handleExcludeNotification} /> {/* Excluir apenas no clique */}
       </div>
     </div>
   );
