@@ -1,75 +1,32 @@
-import { useEffect, useState, useRef } from 'react'
-
-import './notification.css'
-import notification_foto from '../../../public/img/svgs/notificacao.svg'
-import NotificationItem from './notificationItem/NotificationItem'
-import fetchUserNotifications from '../../services/notifications/fetchUserNotifications'
-import React from 'react'
-
-export default function Notifications({notification, handleExclusion, serverIP}) {
-
-    const divRef = useRef(null)
-
-    const handleClickOutside = (e) => {
-        if(divRef.current && !divRef.current.contains(e.target)) {
-            setIsMenuOpened(false)
-        }
-    }
-
-    useEffect(() => {
-        document.addEventListener('mousedown', handleClickOutside)
-
-        return () => { document.removeEventListener('mousedown', handleClickOutside) }
-    }, []);
-
-    const token = sessionStorage.getItem('token')
-
-    //const [ notificationList, setNotificationList ] = useState([])
-    const [ isMenuOpened, setIsMenuOpened ] = useState(false)
-
-    // useEffect(() => {
-    //     const fetchData = async() => {
-    //         const data = await fetchUserNotifications(token)
-    //         if(data) setNotificationList(data)
-    //     } 
-    //     fetchData()
-
-    //     const intervalo = setInterval(() => {
-    //         fetchData()
-    //     }, 30000) // Atualiza a cada 30 segundos!
-
-    //     return () => clearInterval(intervalo);
-
-    // }, [ token ])  
-
-    // const removeNotificationFromList = (idNotification) => {
-    //     let aux = [...notificationList];
-    //     aux = aux.filter(not => not.ID_NOTIFICACAO != idNotification)
-    //     setNotificationList(aux)
-    // }
-
-    return (
-        <div className='notifications_menu' ref={divRef}>
-            <div className='notification_icon'  onClick={(e) => setIsMenuOpened(prev => !prev)}>
-                <img src={notification_foto}/>
-                { notification?.length > 0 ? 
-                    <div className='notification_number'>{notification.length}</div>
-                : ''}
-            </div>
-            <div className='notifications_dropdown' style={ isMenuOpened ? {} : {display: 'none'}}>
-                <div className='arrow'></div>
-                { notification?.length > 0 ? 
-                    notification.map((item, index) => 
-                        <React.Fragment key={`notification_${item?.TEXTO}_${index}`}>
-                            <NotificationItem notification={item}
-                            handleExclusion={handleExclusion}
-                            serverIP={serverIP}
-                              />
-                            { index != notification.length - 1 ? <div className='division'></div> : '' }
-                        </React.Fragment>
-                    )
-                : 'Sem notificações pendentes'}
-            </div>
-        </div>
-    )
-}
+[{…}]
+NotificationItem.jsx:26 Excluindo notificação: 135
+NotificationItem.jsx:27 Server IP: http://localhost:3000
+fetchDeleteNotification.jsx:4 
+        
+        
+        DELETE http://localhost:3000/deleteNotification/135 404 (Not Found)
+fetchDeleteNotification @ fetchDeleteNotification.jsx:4
+handleExcludeNotification @ NotificationItem.jsx:29
+callCallback2 @ react-dom.development.js:4164
+invokeGuardedCallbackDev @ react-dom.development.js:4213
+invokeGuardedCallback @ react-dom.development.js:4277
+invokeGuardedCallbackAndCatchFirstError @ react-dom.development.js:4291
+executeDispatch @ react-dom.development.js:9041
+processDispatchQueueItemsInOrder @ react-dom.development.js:9073
+processDispatchQueue @ react-dom.development.js:9086
+dispatchEventsForPlugins @ react-dom.development.js:9097
+(anônimo) @ react-dom.development.js:9288
+batchedUpdates$1 @ react-dom.development.js:26140
+batchedUpdates @ react-dom.development.js:3991
+dispatchEventForPluginEventSystem @ react-dom.development.js:9287
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ react-dom.development.js:6465
+dispatchEvent @ react-dom.development.js:6457
+dispatchDiscreteEvent @ react-dom.development.js:6430
+Mostrar mais 15 quadros
+Mostrar menos
+NotificationItem.jsx:26 Excluindo notificação: 135
+NotificationItem.jsx:27 Server IP: http://localhost:3000
+fetchDeleteNotification.jsx:4 
+        
+        
+        DELETE http://localhost:3000/deleteNotification/135 404 (Not Found)
