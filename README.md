@@ -1,1 +1,4 @@
-Failed to load resource: the server responded with a status of 404 (Not Found)undefined/deleteNotification/undefined:1 
+fetchDeleteNotification.jsx:4 
+        
+        
+        DELETE http://localhost:5173/undefined/deleteNotification/134 404 (Not Found)
