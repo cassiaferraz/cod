@@ -18,15 +18,18 @@ export default function NotificationItem({ serverIP, notification, handleExclusi
         if(notification.REFERENCIA.path) navigate('/' + notification.REFERENCIA.path)
     }
 
-    const handleExcludeNotification = async () => {
-        const token = sessionStorage.getItem('token')
-        console.log('EXCLUINDO NOTI')
-        const response = await fetchDeleteNotification(token, notification?.ID_NOTIFICACAO)
-        if(! response.ok) {
-            alert('Erro ao excluir notificação')
-        }
-        else handleExclusion(notification?.ID_NOTIFICACAO)
+    const handleExcludeNotification = async () => { 
+        const token = sessionStorage.getItem('token'); 
+        const response = await fetchDeleteNotification({ 
+            token, 
+            notificationId: notification?.ID_NOTIFICACAO, serverIP });
+
+    if (!response.ok) {
+        alert('Erro ao excluir notificação');
+    } else {
+        handleExclusion(notification?.ID_NOTIFICACAO); // Chama a função passada como prop
     }
+    };
 
     return (
         <div className="notification_item" style={ isRead ? {color: 'var(--vivo-lightpurple50)'} : {color: 'var(--vivo-green)', fontWeight: '600'} }>
