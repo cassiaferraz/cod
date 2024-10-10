@@ -1,7 +1,21 @@
-[plugin:vite:react-babel] C:\Users\40417764\Documents\P.Individual\progressao\progressao\client\src\components\Notificação\notificationItem\NotificationItem.jsx: Identifier 'useNavigate' has already been declared. (6:43)
-  9 |
-C:/Users/40417764/Documents/P.Individual/progressao/progressao/client/src/components/Notificação/notificationItem/NotificationItem.jsx:6:43
-4  |  import { FaTrash } from "react-icons/fa6"; 
-5  |  import fetchDeleteNotification from "../../../services/notifications/fetchDeleteNotification"; 
-6  |  import { useState } from "react"; import { useNavigate } from "react-router-dom";
-   |                                                  ^
+{}
+2024-10-10
+TotalAvaliações: 0
+DELETE - Tentando deletar notificação 81
+
+        DELETE FROM dbo.NOTIFICACOES
+        WHERE ID_NOTIFICACAO = '81'
+        ;
+     { notificationId: '81' }
+Notificação não encontrada para deletar: 81
+{}
+2024-10-10
+TotalAvaliações: 0
+{}
+2024-10-10
+TotalAvaliações: 0
+GET - Buscando notificações para o usuário: 152406
+{}
+GET - Buscando notificações para o usuário: 152406
+2024-10-10
+TotalAvaliações: 0
