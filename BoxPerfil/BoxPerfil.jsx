@@ -68,12 +68,22 @@ function BoxPerfil({ serverIP, avatar }) {
     }
   }, [avatar]);
 
+  const handleExclusion = (idNotification) => 
+    { setNotifications((prevNotifications) => prevNotifications.filter(notification => notification.ID_NOTIFICACAO !== idNotification) ); };
+
+  const removeNotificationFromList = (idNotification) => 
+    { setNotifications((prev) => prev.filter(not => not.ID_NOTIFICACAO !== idNotification)); };
+
+
   return (
     <div>
       
       <Link to="/Perfil" style={{ textDecoration: 'none' }}>
         <header className="header-perfil">
-          <Notifications notification={notifications} />  {/* Passa as notificações para o componente */}
+          <Notifications notification={notifications} 
+          handleExclusion={removeNotificationFromList}
+          serverIP={serverIP}
+          />  {/* Passa as notificações para o componente */}
           
           <img className="icon-usuario" src={currentAvatar} alt="usuario" />
           <div className="info">
