@@ -18,7 +18,6 @@ function BoxPerfil({ serverIP, avatar }) {
 
   const token = sessionStorage.getItem('token');
 
-  // Busca dos dados do usuário
   useEffect(() => {
     async function fetchData() {
       try {
@@ -42,16 +41,16 @@ function BoxPerfil({ serverIP, avatar }) {
     fetchData();
   }, [serverIP, token]);
 
-  // Busca das notificações do usuário
   useEffect(() => {
     async function fetchNotifications() {
       try {
-        const notificationsData = await fetchUserNotifications(token); // Chama sem o objeto { token, serverIP }
-        if (notificationsData) {
-          console.log('Notificações recebidas:', notificationsData);
-          setNotifications(notificationsData); // Atualiza o estado com as notificações recebidas
+        const response = await fetchUserNotifications({ token, serverIP });
+        if (response.ok) {
+          const data = await response.json();
+          console.log('Notificações recebidas:', data);
+          setNotifications(data);
         } else {
-          console.error('Erro ao buscar notificações');
+          console.error('Erro ao buscar notificações:', response.statusText);
         }
       } catch (error) {
         console.error('Erro ao buscar notificações:', error);
@@ -71,9 +70,10 @@ function BoxPerfil({ serverIP, avatar }) {
 
   return (
     <div>
+      
       <Link to="/Perfil" style={{ textDecoration: 'none' }}>
         <header className="header-perfil">
-          <Notifications notification={notifications} serverIP={serverIP} />  {/* Passa as notificações e o serverIP */}
+          <Notifications notification={notifications} />  {/* Passa as notificações para o componente */}
           
           <img className="icon-usuario" src={currentAvatar} alt="usuario" />
           <div className="info">
