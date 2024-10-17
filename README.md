@@ -1,7 +1,4 @@
-<button onClick={() => navigate("/perfil")}>
-    <img
-        className="btn-backPage"
-        src={BackArrow}
-        alt="Voltar"
-    />
-</button>
+fetchDeleteNotification.jsx:4 
+        
+        
+        DELETE http://localhost:5173/undefined/deleteNotification/undefined 404 (Not Found)
