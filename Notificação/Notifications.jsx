@@ -29,33 +29,27 @@ export default function Notifications({notification, serverIP}) {
 
 
 
-    // useEffect(() => {
-    //     const fetchData = async() => {
-    //         const data = await fetchUserNotifications(token)
-    //         if(data) setNotificationList(data)
-    //     } 
-    //     fetchData()
+    useEffect(() => {
+        const fetchData = async() => {
+            const data = await fetchUserNotifications(token)
+            if(data) setNotificationList(data)
+        } 
+        fetchData()
 
-    //     const intervalo = setInterval(() => {
-    //         fetchData()
-    //     }, 30000) // Atualiza a cada 30 segundos!
+        const intervalo = setInterval(() => {
+            fetchData()
+        }, 30000) // Atualiza a cada 30 segundos!
 
-    //     return () => clearInterval(intervalo);
+        return () => clearInterval(intervalo);
 
-    // }, [ token ])  
-
-    // const removeNotificationFromList = (idNotification) => {
-    //     let aux = [...notificationList];
-    //     aux = aux.filter(not => not.ID_NOTIFICACAO != idNotification)
-    //     setNotificationList(aux)
-    // }
+    }, [ token ])  
 
     const removeNotificationFromList = (idNotification) => {
-        const updatedList = notificationList.filter(
-            (not) => not.ID_NOTIFICACAO !== idNotification
-        );
-        setNotificationList(updatedList)
+        let aux = [...notificationList];
+        aux = aux.filter(not => not.ID_NOTIFICACAO != idNotification)
+        setNotificationList(aux)
     }
+
 
     return (
         <div className='notifications_menu' ref={divRef}>
@@ -70,8 +64,7 @@ export default function Notifications({notification, serverIP}) {
                 { notification?.length > 0 ? 
                     notification.map((item, index) => 
                         <React.Fragment key={`notification_${item?.TEXTO}_${index}`}>
-                            <NotificationItem 
-                             notification={item}
+                            <NotificationItem notification={item}
                              handleExclusion={removeNotificationFromList}
                              serverIP={serverIP}
                               />
