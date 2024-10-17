@@ -6,9 +6,12 @@ import NotificationItem from './notificationItem/NotificationItem'
 import fetchUserNotifications from '../../services/notifications/fetchUserNotifications'
 import React from 'react'
 
-export default function Notifications({notification,handleExclusion, serverIP}) {
+export default function Notifications({notification, serverIP}) {
 
     const divRef = useRef(null)
+    const [ notificationList, setNotificationList ] = useState([])
+    const [ isMenuOpened, setIsMenuOpened ] = useState(false)
+    
 
     const handleClickOutside = (e) => {
         if(divRef.current && !divRef.current.contains(e.target)) {
@@ -24,8 +27,7 @@ export default function Notifications({notification,handleExclusion, serverIP}) 
 
     const token = sessionStorage.getItem('token')
 
-    //const [ notificationList, setNotificationList ] = useState([])
-    const [ isMenuOpened, setIsMenuOpened ] = useState(false)
+
 
     // useEffect(() => {
     //     const fetchData = async() => {
@@ -48,6 +50,13 @@ export default function Notifications({notification,handleExclusion, serverIP}) 
     //     setNotificationList(aux)
     // }
 
+    const removeNotificationFromList = (idNotification) => {
+        const updatedList = notificationList.filter(
+            (not) => not.ID_NOTIFICACAO !== idNotification
+        );
+        setNotificationList(updatedList)
+    }
+
     return (
         <div className='notifications_menu' ref={divRef}>
             <div className='notification_icon'  onClick={(e) => setIsMenuOpened(prev => !prev)}>
@@ -61,8 +70,9 @@ export default function Notifications({notification,handleExclusion, serverIP}) 
                 { notification?.length > 0 ? 
                     notification.map((item, index) => 
                         <React.Fragment key={`notification_${item?.TEXTO}_${index}`}>
-                            <NotificationItem notification={item}
-                             handleExclusion={handleExclusion}
+                            <NotificationItem 
+                             notification={item}
+                             handleExclusion={removeNotificationFromList}
                              serverIP={serverIP}
                               />
                             { index != notification.length - 1 ? <div className='division'></div> : '' }
