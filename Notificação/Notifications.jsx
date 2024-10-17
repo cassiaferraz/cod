@@ -6,7 +6,7 @@ import NotificationItem from './notificationItem/NotificationItem'
 import fetchUserNotifications from '../../services/notifications/fetchUserNotifications'
 import React from 'react'
 
-export default function Notifications({notification}) {
+export default function Notifications({notification,handleExclusion, serverIP}) {
 
     const divRef = useRef(null)
 
@@ -62,7 +62,8 @@ export default function Notifications({notification}) {
                     notification.map((item, index) => 
                         <React.Fragment key={`notification_${item?.TEXTO}_${index}`}>
                             <NotificationItem notification={item}
-                            //  handleExclusion={removeNotificationFromList}
+                             handleExclusion={handleExclusion}
+                             serverIP={serverIP}
                               />
                             { index != notification.length - 1 ? <div className='division'></div> : '' }
                         </React.Fragment>
