@@ -1,24 +1,9 @@
-//modell:
-function deleteNotification(notificationId) {
-    const sql = `
-        DELETE FROM dbo.NOTIFICACOES
-        WHERE ID_NOTIFICACAO = '${notificationId}'
-        ;
-    `
-    console.log(sql)
-    const response = sqlUtils.dispatchQuery(sql)
-    return response
-}
-
-//controller:
-const deleteNotification = async (req, res) => {
-    try {
-        const notificationId = req.params.id
-        const response = await notificationModel.deleteNotification(notificationId)
-        res.status(200).json({ message: 'Notificação deletada', ...response })
-
-    } catch (error) {
-        console.error(error)
-        res.status(400).json({ message: 'Deu ruim - deleteNotification' })
-    }
-}
+undefined/deleteNotification/142:1 
+        
+        
+        Failed to load resource: the server responded with a status of 404 (Not Found)
+fetchDeleteNotification.jsx:15  Erro ao excluir notificação: 
+fetchDeleteNotification @ fetchDeleteNotification.jsx:15
+NotificationItem.jsx?t=1729175911290:48 Resposta da exclusão: null
+NotificationItem.jsx?t=1729176222711:27 Server IP em NotificationItem
+NotificationItem.jsx?t=1729176222711:27 Server IP em 
