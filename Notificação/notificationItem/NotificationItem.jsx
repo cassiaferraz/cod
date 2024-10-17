@@ -1,3 +1,9 @@
+import fetchReadNotification from "../../../services/notifications/fetchReadNotification"
+import { FaTrash } from "react-icons/fa6";
+import fetchDeleteNotification from "../../../services/notifications/fetchDeleteNotification";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 export default function NotificationItem({ notification, handleExclusion, serverIP }) {
     const navigate = useNavigate();
     const [isRead, setIsRead] = useState(notification?.STATUS_LEITURA);
